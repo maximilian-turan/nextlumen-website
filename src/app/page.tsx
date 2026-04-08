@@ -1,7 +1,23 @@
-export default function RootPage() {
+"use client";
+
+import Navigation from "@/components/Navigation";
+import Hero from "@/components/Hero";
+import Services from "@/components/Services";
+import About from "@/components/About";
+import CaseStudies from "@/components/CaseStudies";
+import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
+
+export default function Home() {
   return (
-    <div style={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#000", color: "#fff", fontFamily: "sans-serif" }}>
-      <h1>NextLumen ist Online</h1>
-    </div>
+    <main className="min-h-screen bg-background">
+      <Navigation />
+      <Hero />
+      <Services />
+      <About />
+      <CaseStudies />
+      <Contact />
+      <Footer />
+    </main>
   );
 }
