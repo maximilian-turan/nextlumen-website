@@ -23,7 +23,8 @@ export default function Navigation() {
   });
 
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
+    // Die Korrektur: Wir sagen TypeScript, dass es ein HTMLElement ist
+    const element = document.querySelector(href) as HTMLElement; 
     if (element) {
       const offsetTop = element.offsetTop - 80; // Account for fixed nav height
       window.scrollTo({
