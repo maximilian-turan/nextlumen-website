@@ -1,12 +1,7 @@
-import { SplineSceneBasic } from "@/components/ui/spline-demo";
-
-export default function Home() {
+export default function RootPage() {
   return (
-    <main className="min-h-screen w-full bg-background">
-      <div className="w-full h-screen">
-        <SplineSceneBasic />
-      </div>
-    </main>
+    <div style={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#000", color: "#fff", fontFamily: "sans-serif" }}>
+      <h1>NextLumen ist Online</h1>
+    </div>
   );
 }
-// update
