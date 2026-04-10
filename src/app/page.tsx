@@ -1,23 +1,9 @@
-"use client";
-
-import Navigation from "@/components/Navigation";
-import Hero from "@/components/Hero";
-import Services from "@/components/Services";
-import About from "@/components/About";
-import CaseStudies from "@/components/CaseStudies";
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
+import { SplineSceneBasic } from "@/components/ui/spline-demo"
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background">
-      <Navigation />
-      <Hero />
-      <Services />
-      <About />
-      <CaseStudies />
-      <Contact />
-      <Footer />
+    <main className="w-full h-screen overflow-hidden bg-black">
+      <SplineSceneBasic />
     </main>
-  );
+  )
 }

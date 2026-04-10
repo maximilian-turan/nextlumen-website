@@ -1,25 +1,36 @@
 'use client'
 
-import { SplineScene } from "@/components/ui/spline";
+import { SplineScene } from "@/components/ui/spline"
+import { Card } from "@/components/ui/card"
+import { Spotlight } from "@/components/ui/spotlight"
 
 export function SplineSceneBasic() {
   return (
-    <div className="relative w-full h-screen bg-black overflow-hidden">
-      {/* 3D Background Scene */}
-      <SplineScene
-        scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-        className="w-full h-full"
+    <Card className="w-full h-screen bg-black/[0.96] relative overflow-hidden rounded-none border-0">
+      <Spotlight
+        className="-top-40 left-0 md:left-60 md:-top-20"
+        fill="white"
       />
 
-      {/* Minimal Content - Top Left Corner */}
-      <div className="absolute top-8 left-8 z-10">
-        <h1 className="text-lg md:text-2xl font-display font-bold text-white mb-1">
-          NextLumen
-        </h1>
-        <p className="text-xs md:text-sm text-white/70">
-          Build the Future. Today
-        </p>
+      <div className="flex h-full">
+        {/* Left content */}
+        <div className="flex-1 p-8 relative z-10 flex flex-col justify-center">
+          <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400">
+            NextLumen
+          </h1>
+          <p className="mt-4 text-xl md:text-2xl text-neutral-400">
+            Future begins. Today...
+          </p>
+        </div>
+
+        {/* Right content */}
+        <div className="flex-1 relative">
+          <SplineScene
+            scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+            className="w-full h-full"
+          />
+        </div>
       </div>
-    </div>
+    </Card>
   )
 }
