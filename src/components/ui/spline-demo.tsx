@@ -1,8 +1,63 @@
 'use client'
 
+import { useState, useCallback } from 'react'
 import { SplineScene } from "@/components/ui/spline"
 import { Card } from "@/components/ui/card"
 import { Spotlight } from "@/components/ui/spotlight"
+
+function SpeakButton() {
+  const [speaking, setSpeaking] = useState(false)
+
+  const speak = useCallback(() => {
+    if (!('speechSynthesis' in window) || speaking) return
+
+    window.speechSynthesis.cancel()
+
+    const utterance = new SpeechSynthesisUtterance(
+      'Future begins. Today... Welcome to NextLumen.'
+    )
+    utterance.lang = 'en-US'
+    utterance.rate = 0.88
+    utterance.pitch = 0.95
+
+    // Pick a deep English voice if available
+    const voices = window.speechSynthesis.getVoices()
+    const preferred = voices.find(v =>
+      v.lang.startsWith('en') && /daniel|alex|google us|microsoft david/i.test(v.name)
+    )
+    if (preferred) utterance.voice = preferred
+
+    utterance.onstart = () => setSpeaking(true)
+    utterance.onend = () => setSpeaking(false)
+    utterance.onerror = () => setSpeaking(false)
+
+    window.speechSynthesis.speak(utterance)
+  }, [speaking])
+
+  return (
+    <button
+      onClick={speak}
+      aria-label="Let the robot speak"
+      className={`mt-6 flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-all duration-300
+        ${speaking
+          ? 'border-white/40 text-white bg-white/10 cursor-default'
+          : 'border-white/20 text-neutral-400 hover:border-white/50 hover:text-white hover:bg-white/5 cursor-pointer'
+        }`}
+    >
+      {/* Sound wave icon */}
+      <span className="flex items-end gap-[3px] h-4">
+        {[1, 2, 3, 2, 1].map((h, i) => (
+          <span
+            key={i}
+            className={`w-[3px] rounded-full bg-current transition-all duration-150 ${speaking ? 'animate-pulse' : ''}`}
+            style={{ height: `${h * 4}px` }}
+          />
+        ))}
+      </span>
+      {speaking ? 'Speaking...' : 'Let the robot speak'}
+    </button>
+  )
+}
 
 export function SplineSceneBasic() {
   return (
@@ -21,6 +76,7 @@ export function SplineSceneBasic() {
           <p className="mt-3 text-lg sm:text-xl md:text-2xl text-neutral-400">
             Future begins. Today...
           </p>
+          <SpeakButton />
         </div>
 
         {/* 3D Scene — top on mobile, right on desktop */}
