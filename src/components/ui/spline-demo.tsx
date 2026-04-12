@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { SplineScene } from "@/components/ui/spline"
 import { Card } from "@/components/ui/card"
 import { Spotlight } from "@/components/ui/spotlight"
@@ -97,48 +97,106 @@ function SpeakButton({ onSpeakChange }: { onSpeakChange: (s: boolean) => void })
   )
 }
 
-function RobotSpeakingFX({ speaking }: { speaking: boolean }) {
-  if (!speaking) return null
-  return (
-    <>
-      {/* Pulsing glow rings around robot */}
-      {[1, 2, 3].map((i) => (
-        <div
-          key={i}
-          className="absolute inset-0 rounded-full pointer-events-none"
-          style={{
-            border: '1px solid rgba(255,255,255,0.12)',
-            borderRadius: '50%',
-            margin: 'auto',
-            width: `${50 + i * 18}%`,
-            height: `${40 + i * 14}%`,
-            top: 0, bottom: 0, left: 0, right: 0,
-            position: 'absolute',
-            animation: `ping ${0.9 + i * 0.3}s cubic-bezier(0,0,0.2,1) infinite`,
-            animationDelay: `${i * 0.2}s`,
-          }}
-        />
-      ))}
+function RobotScene({ speaking }: { speaking: boolean }) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  // mouth offset relative to center of container, in %
+  const [offset, setOffset] = useState({ x: 0, y: 0 })
+  const targetRef = useRef({ x: 0, y: 0 })
+  const rafRef = useRef<number | null>(null)
 
-      {/* Sound wave bars — robot mouth area */}
-      <div
-        className="absolute flex items-center gap-[2px] z-10"
-        style={{ left: '50%', top: '30%', transform: 'translate(-50%, -50%)' }}
-      >
-        {[2, 3, 5, 4, 6, 4, 5, 3, 2].map((h, i) => (
-          <span
-            key={i}
-            className="rounded-full bg-white/70"
+  // Smooth lerp toward target
+  useEffect(() => {
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t
+    const tick = () => {
+      setOffset(prev => {
+        const nx = lerp(prev.x, targetRef.current.x, 0.08)
+        const ny = lerp(prev.y, targetRef.current.y, 0.08)
+        if (Math.abs(nx - prev.x) < 0.01 && Math.abs(ny - prev.y) < 0.01)
+          return prev
+        return { x: nx, y: ny }
+      })
+      rafRef.current = requestAnimationFrame(tick)
+    }
+    rafRef.current = requestAnimationFrame(tick)
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current) }
+  }, [])
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = containerRef.current?.getBoundingClientRect()
+    if (!rect) return
+    // Normalized -1 to 1
+    const nx = (e.clientX - rect.left) / rect.width * 2 - 1
+    const ny = (e.clientY - rect.top)  / rect.height * 2 - 1
+    // Max offset: ±5% horizontal, ±4% vertical
+    targetRef.current = { x: nx * 5, y: ny * 4 }
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    targetRef.current = { x: 0, y: 0 }
+  }, [])
+
+  // Mouth base position: 50% left, 30% top — offset shifts it with the head
+  const mouthLeft = `calc(${50 + offset.x}%)`
+  const mouthTop  = `calc(${30 + offset.y}%)`
+
+  return (
+    <div
+      ref={containerRef}
+      className="flex-1 relative min-h-[55vh] md:min-h-0 order-1 md:order-2"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <SplineScene
+        scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+        className="w-full h-full"
+      />
+
+      {speaking && (
+        <>
+          {/* Pulsing glow rings */}
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="pointer-events-none absolute"
+              style={{
+                border: '1px solid rgba(255,255,255,0.12)',
+                borderRadius: '50%',
+                width: `${50 + i * 18}%`,
+                height: `${40 + i * 14}%`,
+                left: '50%', top: '50%',
+                transform: 'translate(-50%, -50%)',
+                animation: `ping ${0.9 + i * 0.3}s cubic-bezier(0,0,0.2,1) infinite`,
+                animationDelay: `${i * 0.2}s`,
+              }}
+            />
+          ))}
+
+          {/* Soundwave bars — follow robot mouth with mouse */}
+          <div
+            className="absolute flex items-center gap-[2px] z-10 pointer-events-none"
             style={{
-              width: '2px',
-              height: `${h * 2}px`,
-              animation: `soundbar 0.${5 + (i % 4)}s ease-in-out infinite alternate`,
-              animationDelay: `${i * 0.06}s`,
+              left: mouthLeft,
+              top: mouthTop,
+              transform: 'translate(-50%, -50%)',
+              transition: 'left 0.05s, top 0.05s',
             }}
-          />
-        ))}
-      </div>
-    </>
+          >
+            {[2, 3, 5, 4, 6, 4, 5, 3, 2].map((h, i) => (
+              <span
+                key={i}
+                className="rounded-full bg-white/70"
+                style={{
+                  width: '2px',
+                  height: `${h * 2}px`,
+                  animation: `soundbar 0.${5 + (i % 4)}s ease-in-out infinite alternate`,
+                  animationDelay: `${i * 0.06}s`,
+                }}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
   )
 }
 
@@ -153,8 +211,8 @@ export function SplineSceneBasic() {
           to   { transform: scaleY(1);   opacity: 1; }
         }
         @keyframes ping {
-          0%   { transform: scale(0.85); opacity: 0.6; }
-          100% { transform: scale(1.15); opacity: 0; }
+          0%   { transform: translate(-50%, -50%) scale(0.85); opacity: 0.6; }
+          100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0; }
         }
       `}</style>
 
@@ -174,14 +232,7 @@ export function SplineSceneBasic() {
             <SpeakButton onSpeakChange={setSpeaking} />
           </div>
 
-          {/* 3D Robot Scene */}
-          <div className="flex-1 relative min-h-[55vh] md:min-h-0 order-1 md:order-2">
-            <SplineScene
-              scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-              className="w-full h-full"
-            />
-            <RobotSpeakingFX speaking={speaking} />
-          </div>
+          <RobotScene speaking={speaking} />
         </div>
       </Card>
     </>
