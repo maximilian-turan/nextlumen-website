@@ -1,63 +1,40 @@
-"use client";
+import WordsPullUpMultiStyle, {
+  type StyledSegment,
+} from "./animations/WordsPullUpMultiStyle";
+import ScrollRevealText from "./animations/ScrollRevealText";
 
-import { motion } from "framer-motion";
-import { Users, Target, Award, TrendingUp, Quote } from "lucide-react";
-
-const stats = [
-  { label: "KI-Projekte", value: "50+", icon: Target },
-  { label: "Jahre Erfahrung", value: "8+", icon: Award },
-  { label: "Kunden zufrieden", value: "98%", icon: TrendingUp },
-  { label: "Team-Mitglieder", value: "12", icon: Users }
+const HEADING_SEGMENTS: StyledSegment[] = [
+  { text: "Ich bin Maximilian Turan,", className: "font-normal" },
+  { text: "ein autodidaktischer KI-Stratege.", className: "italic font-serif" },
+  {
+    text: "Ich habe Expertise in Automatisierung, LLM-Systemen und Produktdesign.",
+    className: "font-normal",
+  },
 ];
+
+const BODY_TEXT =
+  "In den letzten sieben Jahren habe ich mit schnell wachsenden Start-ups und etablierten Unternehmen zusammengearbeitet und KI-Systeme gebaut, die chaotische Abläufe in einen klaren, sich verstärkenden Vorteil verwandeln. Gemeinsam haben wir Lösungen geliefert, die in mehreren Branchen messbare Ergebnisse erzielt haben.";
 
 export default function About() {
   return (
-    <section id="about" className="py-24 px-4 sm:px-6 lg:px-8 bg-background">
-      <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
+    <section className="bg-black px-4 py-20 md:px-6 md:py-28">
+      <div className="mx-auto flex max-w-6xl flex-col items-center rounded-2xl bg-[#101010] px-6 py-16 text-center md:rounded-[2rem] md:px-12 md:py-24">
+        <span className="mb-8 text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs">
+          Angewandte KI
+        </span>
+
+        <h2
+          className="max-w-3xl text-3xl leading-[0.95] sm:text-4xl sm:leading-[0.9] md:text-5xl lg:text-6xl xl:text-7xl"
+          style={{ color: "#E1E0CC" }}
         >
-          <h2 className="text-3xl sm:text-4xl font-display font-bold text-foreground mb-6">
-            Über <span className="gradient-text">uns</span>
-          </h2>
+          <WordsPullUpMultiStyle segments={HEADING_SEGMENTS} />
+        </h2>
 
-          <p className="text-lg text-foreground-tertiary max-w-2xl mx-auto">
-            Wir sind KI-Experten mit langjähriger Erfahrung in der Entwicklung und Implementierung von KI-Lösungen für Unternehmen.
-          </p>
-        </motion.div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
-          {stats.map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{
-                duration: 0.6,
-                delay: index * 0.1,
-                ease: "easeOut"
-              }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <stat.icon className="w-8 h-8 text-accent" />
-              </div>
-              <div className="text-3xl font-bold text-foreground mb-2">
-                {stat.value}
-              </div>
-              <div className="text-foreground-tertiary">
-                {stat.label}
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        <ScrollRevealText
+          text={BODY_TEXT}
+          className="mt-12 max-w-2xl text-xs leading-relaxed sm:text-sm md:text-base"
+          style={{ color: "#DEDBC8" }}
+        />
       </div>
     </section>
   );

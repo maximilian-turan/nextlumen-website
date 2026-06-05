@@ -1,196 +1,76 @@
-"use client";
+const LINK_COLOR = "rgba(225, 224, 204, 0.7)";
+const LINK_HOVER = "#E1E0CC";
 
-import { motion } from "framer-motion";
-import { ArrowUp, Mail, Phone, MapPin, Share2, MessageSquare, Code2 } from "lucide-react";
-import Link from "next/link";
-
-const footerLinks = {
-  services: [
-    { name: "KI-Beratung", href: "#services" },
-    { name: "KI-Agenten", href: "#services" },
-    { name: "Automatisierung", href: "#services" },
-    { name: "System-Entwicklung", href: "#services" }
-  ],
-  company: [
-    { name: "Über uns", href: "#about" },
-    { name: "Case Studies", href: "#case-studies" },
-    { name: "Karriere", href: "#" },
-    { name: "Blog", href: "#" }
-  ],
-  legal: [
-    { name: "Impressum", href: "#" },
-    { name: "Datenschutz", href: "#" },
-    { name: "AGB", href: "#" },
-    { name: "Kontakt", href: "#contact" }
-  ]
-};
-
-const socialLinks = [
-  { name: "LinkedIn", icon: Share2, href: "#" },
-  { name: "Twitter", icon: MessageSquare, href: "#" },
-  { name: "Code", icon: Code2, href: "#" }
+const LINK_GROUPS: { title: string; links: string[] }[] = [
+  { title: "Studio", links: ["Unser Ansatz", "Kollektiv", "Programme", "Fallstudien"] },
+  { title: "Ressourcen", links: ["Workshops", "Playbooks", "Einblicke", "FAQ"] },
+  { title: "Verbinden", links: ["LinkedIn", "X / Twitter", "GitHub", "Anfragen"] },
 ];
 
-export default function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
+function FooterLink({ label }: { label: string }) {
   return (
-    <footer className="bg-background-secondary border-t border-border">
-      {/* Main Footer */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Company Info */}
-          <div className="lg:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              viewport={{ once: true }}
-            >
-              <Link href="/" className="inline-block mb-6">
-                <div className="text-2xl font-display font-bold gradient-text">
-                  NextLumen
-                </div>
-              </Link>
+    <a
+      href="#"
+      className="text-sm transition-colors duration-300"
+      style={{ color: LINK_COLOR }}
+      onMouseEnter={(e) => (e.currentTarget.style.color = LINK_HOVER)}
+      onMouseLeave={(e) => (e.currentTarget.style.color = LINK_COLOR)}
+    >
+      {label}
+    </a>
+  );
+}
 
-              <p className="text-foreground-tertiary mb-6 max-w-md">
-                Wir transformieren Unternehmen durch KI. Von der Strategie bis zur
-                Implementierung - wir machen KI zugänglich und wirkungsvoll.
+export default function Footer() {
+  return (
+    <footer className="bg-black px-4 pb-6 md:px-6">
+      <div className="relative overflow-hidden rounded-2xl bg-[#101010] px-6 py-12 md:rounded-[2rem] md:px-12 md:py-16">
+        <div className="bg-noise pointer-events-none absolute inset-0 opacity-[0.1]" />
+
+        <div className="relative mx-auto max-w-7xl">
+          <div className="grid grid-cols-2 gap-10 md:grid-cols-4 lg:gap-16">
+            {/* Brand */}
+            <div className="col-span-2 md:col-span-1">
+              <span
+                className="text-2xl font-medium tracking-tight"
+                style={{ color: "#E1E0CC" }}
+              >
+                NextLumen
+                <span className="align-super text-[0.4em]">*</span>
+              </span>
+              <p className="mt-4 max-w-xs text-sm leading-relaxed text-gray-500">
+                Ein Studio für angewandte KI, das intelligente Systeme für
+                ambitionierte Teams baut.
               </p>
+            </div>
 
-              {/* Contact Info */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-3 text-foreground-tertiary">
-                  <Mail className="w-4 h-4 text-accent" />
-                  <span className="text-sm">hello@nextlumen.ai</span>
-                </div>
-                <div className="flex items-center gap-3 text-foreground-tertiary">
-                  <Phone className="w-4 h-4 text-accent" />
-                  <span className="text-sm">+49 (0) 123 456 789</span>
-                </div>
-                <div className="flex items-center gap-3 text-foreground-tertiary">
-                  <MapPin className="w-4 h-4 text-accent" />
-                  <span className="text-sm">München, Deutschland</span>
-                </div>
+            {/* Link columns */}
+            {LINK_GROUPS.map((group) => (
+              <div key={group.title}>
+                <h3 className="mb-4 text-[10px] uppercase tracking-[0.2em] text-primary">
+                  {group.title}
+                </h3>
+                <ul className="flex flex-col gap-3">
+                  {group.links.map((link) => (
+                    <li key={link}>
+                      <FooterLink label={link} />
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </motion.div>
+            ))}
           </div>
 
-          {/* Services */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-foreground font-semibold mb-4">Services</h3>
-            <ul className="space-y-3">
-              {footerLinks.services.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-foreground-tertiary hover:text-accent transition-colors duration-300 text-sm"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Company */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-foreground font-semibold mb-4">Unternehmen</h3>
-            <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-foreground-tertiary hover:text-accent transition-colors duration-300 text-sm"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Legal */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-foreground font-semibold mb-4">Rechtliches</h3>
-            <ul className="space-y-3">
-              {footerLinks.legal.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-foreground-tertiary hover:text-accent transition-colors duration-300 text-sm"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        </div>
-
-        {/* Social Links */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-          viewport={{ once: true }}
-          className="flex items-center justify-center gap-6 mt-12"
-        >
-          {socialLinks.map((social) => (
-            <Link
-              key={social.name}
-              href={social.href}
-              className="text-foreground-tertiary hover:text-accent transition-colors duration-300"
-              aria-label={social.name}
-            >
-              <social.icon className="w-5 h-5" />
-            </Link>
-          ))}
-        </motion.div>
-      </div>
-
-      {/* Bottom Bar */}
-      <div className="border-t border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-              viewport={{ once: true }}
-              className="text-foreground-tertiary text-sm"
-            >
-              © 2024 NextLumen. Alle Rechte vorbehalten.
-            </motion.div>
-
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
-              viewport={{ once: true }}
-              onClick={scrollToTop}
-              className="flex items-center gap-2 text-foreground-tertiary hover:text-accent transition-colors duration-300 text-sm group"
-            >
-              <span>Nach oben</span>
-              <ArrowUp className="w-4 h-4 group-hover:-translate-y-1 transition-transform duration-300" />
-            </motion.button>
+          {/* Bottom row */}
+          <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-xs text-gray-500">
+              © {new Date().getFullYear()} NextLumen. Alle Rechte vorbehalten.
+            </p>
+            <div className="flex gap-6">
+              <FooterLink label="Impressum" />
+              <FooterLink label="Datenschutz" />
+              <FooterLink label="AGB" />
+            </div>
           </div>
         </div>
       </div>

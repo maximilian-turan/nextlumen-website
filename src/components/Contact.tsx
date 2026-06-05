@@ -1,186 +1,106 @@
-"use client";
-
+import { type FormEvent, useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from "lucide-react";
-import { useState } from "react";
+import { ArrowRight } from "lucide-react";
+import WordsPullUpMultiStyle, {
+  type StyledSegment,
+} from "./animations/WordsPullUpMultiStyle";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+const HEADING_SEGMENTS: StyledSegment[] = [
+  { text: "Lassen Sie uns etwas", className: "font-normal" },
+  { text: "wirklich Intelligentes bauen.", className: "italic font-serif" },
+];
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({
-        name: '',
-        email: '',
-        message: ''
-      });
-    }, 3000);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-  };
+    if (!email) return;
+    // TODO: wire this up to your CRM / form endpoint (e.g. a Vercel Function).
+    setSubmitted(true);
+  }
 
   return (
-    <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8 bg-background-secondary">
-      <div className="max-w-4xl mx-auto">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl sm:text-4xl font-display font-bold text-foreground mb-6">
-            Kontakt <span className="gradient-text">aufnehmen</span>
+    <section id="contact" className="bg-black px-4 py-20 md:px-6 md:py-28">
+      <div className="relative mx-auto flex max-w-6xl flex-col items-center overflow-hidden rounded-2xl bg-[#101010] px-6 py-20 text-center md:rounded-[2rem] md:px-12 md:py-28">
+        {/* Subtle grain for depth */}
+        <div className="bg-noise pointer-events-none absolute inset-0 opacity-[0.12]" />
+
+        <div className="relative flex flex-col items-center">
+          <span className="mb-8 text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs">
+            Anfragen
+          </span>
+
+          <h2
+            className="max-w-3xl text-3xl leading-[0.95] sm:text-4xl sm:leading-[0.9] md:text-5xl lg:text-6xl xl:text-7xl"
+            style={{ color: "#E1E0CC" }}
+          >
+            <WordsPullUpMultiStyle segments={HEADING_SEGMENTS} />
           </h2>
 
-          <p className="text-lg text-foreground-tertiary max-w-2xl mx-auto">
-            Bereit für Ihre KI-Transformation? Kontaktieren Sie uns für eine kostenlose Beratung.
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+          <motion.p
+            className="mt-8 max-w-xl text-sm leading-relaxed text-primary/70 md:text-base"
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3, ease: EASE }}
           >
-            <div className="glass rounded-2xl p-8 border border-border">
-              {isSubmitted ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-8"
+            Sagen Sie uns, wo KI für Ihr Team den entscheidenden Unterschied
+            machen könnte. Wir antworten innerhalb von zwei Werktagen mit einem
+            konkreten ersten Schritt.
+          </motion.p>
+
+          <motion.div
+            className="mt-10 w-full max-w-md"
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.45, ease: EASE }}
+          >
+            {submitted ? (
+              <p
+                className="rounded-full bg-primary/10 px-6 py-4 text-sm font-medium"
+                style={{ color: "#E1E0CC" }}
+              >
+                Danke – wir melden uns in Kürze.
+              </p>
+            ) : (
+              <form
+                onSubmit={handleSubmit}
+                className="group flex items-center gap-2 rounded-full bg-black/60 p-1.5 pl-5 ring-1 ring-white/10 transition-colors focus-within:ring-primary/40"
+              >
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="sie@unternehmen.de"
+                  aria-label="E-Mail-Adresse"
+                  className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-gray-500 sm:text-base"
+                  style={{ color: "#E1E0CC" }}
+                />
+                <button
+                  type="submit"
+                  aria-label="Absenden"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-black transition-transform duration-300 hover:scale-110"
                 >
-                  <CheckCircle className="w-12 h-12 text-accent mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-foreground mb-2">
-                    Nachricht gesendet!
-                  </h3>
-                  <p className="text-foreground-tertiary">
-                    Wir melden uns innerhalb von 24 Stunden bei Ihnen.
-                  </p>
-                </motion.div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-                      Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 glass border border-border rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all duration-300 text-foreground placeholder-foreground-tertiary"
-                      placeholder="Ihr Name"
-                    />
-                  </div>
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </form>
+            )}
 
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                      E-Mail *
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 glass border border-border rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all duration-300 text-foreground placeholder-foreground-tertiary"
-                      placeholder="ihre@email.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
-                      Nachricht *
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      required
-                      rows={4}
-                      value={formData.message}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 glass border border-border rounded-xl focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all duration-300 text-foreground placeholder-foreground-tertiary resize-none"
-                      placeholder="Beschreiben Sie Ihr Projekt..."
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full px-8 py-4 bg-primary hover:bg-primary-hover disabled:bg-primary/50 text-white font-semibold rounded-xl shadow-lg hover:shadow-glow transition-all duration-300 flex items-center justify-center gap-3 disabled:cursor-not-allowed"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        <span>Wird gesendet...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-5 h-5" />
-                        <span>Nachricht senden</span>
-                      </>
-                    )}
-                  </button>
-                </form>
-              )}
-            </div>
-          </motion.div>
-
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <div className="glass rounded-xl p-6 border border-border">
-              <Mail className="w-6 h-6 text-accent mb-3" />
-              <h3 className="text-lg font-semibold text-foreground mb-1">E-Mail</h3>
-              <p className="text-foreground-tertiary">hello@nextlumen.ai</p>
-            </div>
-
-            <div className="glass rounded-xl p-6 border border-border">
-              <Phone className="w-6 h-6 text-accent mb-3" />
-              <h3 className="text-lg font-semibold text-foreground mb-1">Telefon</h3>
-              <p className="text-foreground-tertiary">+49 (0) 123 456 789</p>
-            </div>
-
-            <div className="glass rounded-xl p-6 border border-border">
-              <MapPin className="w-6 h-6 text-accent mb-3" />
-              <h3 className="text-lg font-semibold text-foreground mb-1">Adresse</h3>
-              <p className="text-foreground-tertiary">München, Deutschland</p>
-            </div>
+            <p className="mt-4 text-xs text-gray-500">
+              Lieber per E-Mail?{" "}
+              <a
+                href="mailto:hello@nextlumen.ai"
+                className="text-primary/80 underline-offset-4 transition-colors hover:text-primary hover:underline"
+              >
+                hello@nextlumen.ai
+              </a>
+            </p>
           </motion.div>
         </div>
       </div>
