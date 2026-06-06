@@ -68,8 +68,8 @@ export default function Hero() {
         {/* Top: heading (left) + slogan directly underneath, right-aligned to
             the heading's width. The inline-block wrapper shrinks to the
             heading so the slogan sits exactly under "NextLumen". */}
-        <div className="absolute left-0 top-0 z-10 px-5 pt-14 sm:px-8 sm:pt-16 md:px-10 md:pt-20">
-          <div className="inline-block">
+        <div className="absolute left-0 right-0 top-0 z-10 px-5 pt-14 sm:px-8 sm:pt-16 md:px-10 md:pt-20">
+          <div className="inline-block max-w-full">
             <h1
               className="whitespace-nowrap text-left font-bold leading-[0.85] tracking-[-0.07em] text-[9vw] sm:text-[8.4vw] md:text-[7.8vw] lg:text-[6.6vw] xl:text-[6.3vw] 2xl:text-[6vw]"
               style={{ color: "#E1E0CC" }}
@@ -113,12 +113,12 @@ export default function Hero() {
 
               <motion.a
                 href="#contact"
-                className="group inline-flex w-fit items-center gap-2 rounded-full bg-primary py-1.5 pl-5 pr-1.5 font-medium text-black transition-all duration-300 hover:gap-3"
+                className="group inline-flex w-fit max-w-full items-center gap-2 rounded-2xl bg-primary py-2 pl-5 pr-1.5 font-medium text-black transition-all duration-300 hover:gap-3"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.7, ease: EASE }}
               >
-                <span className="text-sm sm:text-base">
+                <span className="text-left text-sm leading-snug sm:text-base">
                   Beginnen Sie mit dem Aufbau Ihrer individuellen KI-Lösung.
                 </span>
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-black transition-transform duration-300 group-hover:scale-110 sm:h-10 sm:w-10">
