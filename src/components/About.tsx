@@ -13,13 +13,13 @@ const HEADING_SEGMENTS: StyledSegment[] = [
 ];
 
 const PARAGRAPHS = [
-  "Viele Unternehmen stehen vor dem gleichen Problem: Prozesse sind gewachsen, aber nicht strukturiert. Zeit wird in manuelle Aufgaben investiert, während echtes Wachstum liegen bleibt.",
+  "Viele Unternehmen kennen das Problem: gewachsene, aber unstrukturierte Prozesse. Zeit fließt in manuelle Aufgaben – echtes Wachstum bleibt liegen.",
   "Wir analysieren, wo in deinem Business Zeit verloren geht, wo Prozesse bremsen und wo Potenzial ungenutzt bleibt – und bauen darauf aufbauend KI-Lösungen, die genau dort ansetzen.",
-  "Unser Fokus liegt nicht auf Tools oder Trends, sondern auf Ergebnissen: weniger manueller Aufwand, klarere Abläufe und Systeme, die im Hintergrund zuverlässig arbeiten.",
+  "Unser Fokus liegt nicht auf Tools oder Trends, sondern auf Ergebnissen. Weniger Aufwand, klarere Abläufe und Systeme, die zuverlässig im Hintergrund arbeiten.",
   "So entstehen Lösungen, die nicht nur kurzfristig entlasten, sondern langfristig einen echten Wettbewerbsvorteil schaffen.",
 ];
 
-const bodyClass = "text-sm leading-relaxed sm:text-base";
+const bodyClass = "break-words text-sm leading-relaxed sm:text-base";
 const bodyStyle = { color: "#DEDBC8" };
 
 export default function About() {
@@ -37,7 +37,7 @@ export default function About() {
           <WordsPullUpMultiStyle segments={HEADING_SEGMENTS} />
         </h2>
 
-        <div className="mt-12 flex max-w-2xl flex-col gap-7">
+        <div className="mt-12 flex w-full max-w-2xl flex-col gap-7">
           <ScrollRevealText
             text={PARAGRAPHS[0]}
             className={bodyClass}
