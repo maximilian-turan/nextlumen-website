@@ -38,7 +38,7 @@ export default function WordsPullUpMultiStyle({
   return (
     <span
       ref={ref}
-      className={`inline-flex flex-wrap justify-center ${className}`}
+      className={`flex flex-wrap justify-center ${className}`}
     >
       {words.map((item, i) => (
         <span key={i} className="inline-block overflow-hidden align-bottom">

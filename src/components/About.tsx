@@ -31,7 +31,7 @@ export default function About() {
         </span>
 
         <h2
-          className="max-w-4xl text-3xl leading-[1.05] sm:text-4xl sm:leading-[1] md:text-5xl md:leading-[0.95] lg:text-6xl"
+          className="mx-auto w-full max-w-4xl text-3xl leading-[1.05] sm:text-4xl sm:leading-[1] md:text-5xl md:leading-[0.95] lg:text-6xl"
           style={{ color: "#E1E0CC" }}
         >
           <WordsPullUpMultiStyle segments={HEADING_SEGMENTS} />

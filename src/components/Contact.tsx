@@ -35,7 +35,7 @@ export default function Contact() {
           </span>
 
           <h2
-            className="max-w-3xl text-3xl leading-[0.95] sm:text-4xl sm:leading-[0.9] md:text-5xl lg:text-6xl xl:text-7xl"
+            className="mx-auto w-full max-w-3xl text-3xl leading-[0.95] sm:text-4xl sm:leading-[0.9] md:text-5xl lg:text-6xl xl:text-7xl"
             style={{ color: "#E1E0CC" }}
           >
             <WordsPullUpMultiStyle segments={HEADING_SEGMENTS} />
