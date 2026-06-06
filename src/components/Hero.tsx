@@ -9,11 +9,11 @@ const ROBOT_SCENE =
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 const NAV_ITEMS = [
-  "Unser Ansatz",
-  "Kollektiv",
-  "Workshops",
-  "Programme",
-  "Anfragen",
+  "Startseite",
+  "Lösungen",
+  "Ergebnisse",
+  "Über uns",
+  "Kontakt",
 ];
 
 const LINK_COLOR = "rgba(225, 224, 204, 0.8)";
